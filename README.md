@@ -9,6 +9,7 @@ Python toolkit for Siemens TIA Portal projects.
 | `tia_project_reader.py` | Read TIA projects without TIA Portal (parses PLF binary) | **No** |
 | `tia_project_creator.py` | Create TIA projects via Openness API | **Yes** |
 | `tia_block_generator.py` | Generate TIA Openness XML for OB/FB/FC/DB/Tags | **No** |
+| `tia_tag_export.py` | CSV/Excel tag import/export from PLF projects | **No** |
 
 ## Quick Start
 
@@ -82,6 +83,24 @@ gen.create_tag_table("IO_Tags", [
 gen.save("IO_Tags.xml")
 ```
 
+### Export/Import tags and variables (no TIA Portal needed)
+
+```python
+from tia_tools import TiaTagExporter, TiaTagImporter
+
+# Export all tags from a TIA project to CSV
+exporter = TiaTagExporter("D:/Projects/MyProject/MyProject")
+exporter.export_csv("variables.csv")        # semicolon-delimited for German Excel
+exporter.export_excel("variables.xlsx")     # colored Excel with overview sheet (requires openpyxl)
+
+# Import tags from CSV and generate TIA XML
+importer = TiaTagImporter()
+importer.import_csv("my_tags.csv")
+importer.generate_tag_table_xml("IO_Tags.xml")              # PLC tag table
+importer.generate_db_xml("DB_Process.xml", db_number=10)     # Global data block
+importer.generate_fb_xml("FB_Control.xml", fb_number=5)      # Function block with sections
+```
+
 ### Create a TIA project (requires TIA Portal + Openness)
 
 ```python
@@ -106,13 +125,22 @@ python -m tia_tools.tia_project_reader "D:/Projects/MyProject/MyProject"
 # Generate example blocks
 python -m tia_tools.tia_block_generator
 
+# Export tags to CSV/Excel
+python tia_tools/tia_tag_export.py export "D:/Projects/MyProject" tags.csv
+python tia_tools/tia_tag_export.py export "D:/Projects/MyProject" tags.xlsx
+
+# Import tags from CSV to TIA XML
+python tia_tools/tia_tag_export.py import tags.csv IO_Tags.xml tag_table
+python tia_tools/tia_tag_export.py import vars.csv DB_Process.xml db
+
 # Create a project
 python -m tia_tools.tia_project_creator MyProject D:/Projects --cpu "6ES7 515-2FM01-0AB0"
 ```
 
 ## Requirements
 
-- **Reader + Block Generator:** Python 3.8+ (no external dependencies)
+- **Reader + Block Generator + Tag Export (CSV):** Python 3.8+ (no external dependencies)
+- **Tag Export (Excel):** Python 3.8+ with `openpyxl`
 - **Project Creator:** Python 3.8+ with `pythonnet`, TIA Portal V14+ Professional with Openness
 
 ## PLF File Format (Reverse Engineered)
