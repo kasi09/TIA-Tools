@@ -1,0 +1,33 @@
+FUNCTION_BLOCK "FB_PlantControl"
+{ S7_Optimized_Access := 'TRUE' }
+VERSION : 0.1
+// Plant control with two motors
+
+VAR_INPUT
+    Start : Bool;   // Plant start
+    Stop : Bool;   // Plant stop
+END_VAR
+
+VAR_OUTPUT
+    PlantRunning : Bool;   // Plant is running
+    ErrorActive : Bool := false;   // Any error active
+END_VAR
+
+VAR
+    Motor1 : "UDT_MotorStatus";   // Motor 1 status
+    Motor2 : "UDT_MotorStatus";   // Motor 2 status
+END_VAR
+
+BEGIN
+    IF #Start AND NOT #Stop THEN
+        #PlantRunning := TRUE;
+        #Motor1.Enable := TRUE;
+        #Motor2.Enable := TRUE;
+    ELSIF #Stop THEN
+        #PlantRunning := FALSE;
+        #Motor1.Enable := FALSE;
+        #Motor2.Enable := FALSE;
+    END_IF;
+
+    #ErrorActive := #Motor1.Error OR #Motor2.Error;
+END_FUNCTION_BLOCK

@@ -10,6 +10,7 @@ Python toolkit for Siemens TIA Portal projects.
 | `tia_project_creator.py` | Create TIA projects via Openness API | **Yes** |
 | `tia_block_generator.py` | Generate TIA Openness XML for OB/FB/FC/DB/Tags | **No** |
 | `tia_tag_export.py` | CSV/Excel tag import/export from PLF projects | **No** |
+| `tia_scl_generator.py` | Generate SCL source files (.scl) for direct TIA import | **No** |
 
 ## Quick Start
 
@@ -101,6 +102,47 @@ importer.generate_db_xml("DB_Process.xml", db_number=10)     # Global data block
 importer.generate_fb_xml("FB_Control.xml", fb_number=5)      # Function block with sections
 ```
 
+### Generate SCL source files (no TIA Portal needed)
+
+```python
+from tia_tools import SclGenerator, MemberDef, BOOL, REAL, INT, TIME
+
+scl = SclGenerator()
+
+# Function Block with instance DB
+scl.function_block_with_idb("FB_Motor", "DB_Motor1", members=[
+    MemberDef("Enable", BOOL, "Input", comment="Motor enable"),
+    MemberDef("Speed_SP", REAL, "Input", "0.0", "Speed setpoint %"),
+    MemberDef("Running", BOOL, "Output", comment="Running feedback"),
+    MemberDef("Timer", TIME, "Static", "T#0s"),
+], code="""
+    IF #Enable THEN
+        #Running := TRUE;
+    ELSE
+        #Running := FALSE;
+    END_IF;
+""")
+
+# Function with return value
+scl.function("FC_Scale", members=[
+    MemberDef("RawValue", INT, "Input"),
+    MemberDef("ScaleMax", REAL, "Input", "100.0"),
+], return_type="Real", code="""
+    #FC_Scale := INT_TO_REAL(#RawValue) * #ScaleMax / 27648.0;
+""")
+
+# Data Block + UDT
+scl.data_block("DB_Data", members=[
+    MemberDef("Speed", REAL, initial_value="0.0"),
+    MemberDef("Alarm", BOOL, initial_value="false"),
+])
+
+scl.save("program.scl")          # All blocks in one file
+scl.save_separate("scl_output/") # Each block as separate .scl file
+```
+
+Import in TIA Portal: *External Sources > Add from file > Generate blocks*
+
 ### Create a TIA project (requires TIA Portal + Openness)
 
 ```python
@@ -133,13 +175,16 @@ python tia_tools/tia_tag_export.py export "D:/Projects/MyProject" tags.xlsx
 python tia_tools/tia_tag_export.py import tags.csv IO_Tags.xml tag_table
 python tia_tools/tia_tag_export.py import vars.csv DB_Process.xml db
 
+# Generate SCL source files
+python -m tia_tools.tia_scl_generator
+
 # Create a project
 python -m tia_tools.tia_project_creator MyProject D:/Projects --cpu "6ES7 515-2FM01-0AB0"
 ```
 
 ## Requirements
 
-- **Reader + Block Generator + Tag Export (CSV):** Python 3.8+ (no external dependencies)
+- **Reader + Block Generator + Tag Export (CSV) + SCL Generator:** Python 3.8+ (no external dependencies)
 - **Tag Export (Excel):** Python 3.8+ with `openpyxl`
 - **Project Creator:** Python 3.8+ with `pythonnet`, TIA Portal V14+ Professional with Openness
 

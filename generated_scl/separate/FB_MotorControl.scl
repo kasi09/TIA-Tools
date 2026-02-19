@@ -1,0 +1,30 @@
+FUNCTION_BLOCK "FB_MotorControl"
+{ S7_Optimized_Access := 'TRUE' }
+VERSION : 0.1
+// Motor control function block
+
+VAR_INPUT
+    Enable : Bool;   // Motor enable signal
+    Speed_SP : Real := 0.0;   // Speed setpoint 0-100%
+END_VAR
+
+VAR_OUTPUT
+    Running : Bool;   // Motor running feedback
+    Speed_PV : Real := 0.0;   // Speed process value
+    Error : Bool := false;   // Error flag
+END_VAR
+
+VAR
+    RunTimer : Time := T#0s;   // Internal run timer
+    StartupDelay : Time := T#5s;   // Startup delay
+END_VAR
+
+BEGIN
+    IF #Enable AND NOT #Error THEN
+        #Running := TRUE;
+        #Speed_PV := #Speed_SP;
+    ELSE
+        #Running := FALSE;
+        #Speed_PV := 0.0;
+    END_IF;
+END_FUNCTION_BLOCK

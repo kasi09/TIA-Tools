@@ -1,0 +1,19 @@
+FUNCTION "FC_Scale" : Real
+{ S7_Optimized_Access := 'TRUE' }
+VERSION : 0.1
+// Linear analog scaling
+
+VAR_INPUT
+    RawValue : Int;   // Raw analog input (0-27648)
+    ScaleMin : Real := 0.0;   // Engineering unit minimum
+    ScaleMax : Real := 100.0;   // Engineering unit maximum
+END_VAR
+
+VAR_TEMP
+    TempCalc : Real;
+END_VAR
+
+BEGIN
+    #TempCalc := INT_TO_REAL(#RawValue);
+    #FC_Scale := #ScaleMin + (#TempCalc * (#ScaleMax - #ScaleMin) / 27648.0);
+END_FUNCTION

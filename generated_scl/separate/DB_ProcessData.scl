@@ -1,0 +1,16 @@
+DATA_BLOCK "DB_ProcessData"
+{ S7_Optimized_Access := 'TRUE' }
+VERSION : 0.1
+// Process data storage
+
+VAR
+    Motor1_Run : Bool := false;   // Motor 1 run command
+    Motor2_Run : Bool := false;   // Motor 2 run command
+    Valve1_Open : Bool := false;   // Valve 1 open command
+    Speed_Setpoint : Real := 0.0;   // Speed SP in %
+    ProcessTemp : Real := 0.0;   // Process temperature
+    AlarmWord : Word := 16#0000;   // Alarm status word
+END_VAR
+
+BEGIN
+END_DATA_BLOCK

@@ -1,0 +1,9 @@
+DATA_BLOCK "DB_Motor1"
+{ S7_Optimized_Access := 'TRUE' }
+VERSION : 0.1
+"FB_MotorControl"
+
+BEGIN
+   Speed_SP := 50.0;
+   StartupDelay := T#10s;
+END_DATA_BLOCK

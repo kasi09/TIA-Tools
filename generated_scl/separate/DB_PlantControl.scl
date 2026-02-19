@@ -1,0 +1,7 @@
+DATA_BLOCK "DB_PlantControl"
+{ S7_Optimized_Access := 'TRUE' }
+VERSION : 0.1
+"FB_PlantControl"
+
+BEGIN
+END_DATA_BLOCK

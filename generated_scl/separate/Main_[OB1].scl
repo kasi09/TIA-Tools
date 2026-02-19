@@ -1,0 +1,15 @@
+ORGANIZATION_BLOCK "Main [OB1]"
+{ S7_Optimized_Access := 'TRUE' }
+VERSION : 0.1
+// Main scan cycle
+
+BEGIN
+    // Call motor control
+    "DB_Motor1"(Enable := "DI_Motor_Enable",
+                Speed_SP := "FC_Scale"(RawValue := "AI_Speed_SP",
+                                       ScaleMin := 0.0,
+                                       ScaleMax := 100.0));
+
+    // Write outputs
+    "DO_Motor_Run" := "DB_Motor1".Running;
+END_ORGANIZATION_BLOCK

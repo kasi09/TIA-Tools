@@ -6,12 +6,14 @@ Modules:
     tia_project_creator - Create TIA projects via Openness API (requires TIA Portal)
     tia_block_generator - Generate TIA Openness XML blocks (no TIA Portal needed)
     tia_tag_export      - CSV/Excel tag import/export (no TIA Portal needed)
+    tia_scl_generator   - Generate SCL source files (no TIA Portal needed)
 """
 
 from .tia_project_reader import TiaProjectReader, ProjectInfo
 from .tia_block_generator import TiaBlockGenerator, MemberDef, NetworkDef
 from .tia_block_generator import BOOL, INT, DINT, REAL, LREAL, WORD, DWORD, STRING, TIME
 from .tia_tag_export import TiaTagExporter, TiaTagImporter, export_project_tags, csv_to_tag_table, csv_to_db
+from .tia_scl_generator import SclGenerator
 
 __all__ = [
     "TiaProjectReader",
@@ -19,6 +21,7 @@ __all__ = [
     "TiaBlockGenerator",
     "MemberDef",
     "NetworkDef",
+    "SclGenerator",
     "TiaTagExporter",
     "TiaTagImporter",
     "export_project_tags",

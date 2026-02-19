@@ -1,0 +1,14 @@
+TYPE "UDT_MotorStatus"
+VERSION : 0.1
+// Motor status data type
+
+STRUCT
+    Enable : Bool;   // Enable command
+    Running : Bool;   // Running feedback
+    Error : Bool;   // Error active
+    ErrorCode : Int := 0;   // Error code
+    Speed : Real := 0.0;   // Current speed %
+    RunHours : DInt := 0;   // Operating hours
+END_STRUCT;
+
+END_TYPE

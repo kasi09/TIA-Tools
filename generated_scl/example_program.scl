@@ -1,0 +1,150 @@
+FUNCTION_BLOCK "FB_MotorControl"
+{ S7_Optimized_Access := 'TRUE' }
+VERSION : 0.1
+// Motor control function block
+
+VAR_INPUT
+    Enable : Bool;   // Motor enable signal
+    Speed_SP : Real := 0.0;   // Speed setpoint 0-100%
+END_VAR
+
+VAR_OUTPUT
+    Running : Bool;   // Motor running feedback
+    Speed_PV : Real := 0.0;   // Speed process value
+    Error : Bool := false;   // Error flag
+END_VAR
+
+VAR
+    RunTimer : Time := T#0s;   // Internal run timer
+    StartupDelay : Time := T#5s;   // Startup delay
+END_VAR
+
+BEGIN
+    IF #Enable AND NOT #Error THEN
+        #Running := TRUE;
+        #Speed_PV := #Speed_SP;
+    ELSE
+        #Running := FALSE;
+        #Speed_PV := 0.0;
+    END_IF;
+END_FUNCTION_BLOCK
+
+DATA_BLOCK "DB_Motor1"
+{ S7_Optimized_Access := 'TRUE' }
+VERSION : 0.1
+"FB_MotorControl"
+
+BEGIN
+   Speed_SP := 50.0;
+   StartupDelay := T#10s;
+END_DATA_BLOCK
+
+FUNCTION "FC_Scale" : Real
+{ S7_Optimized_Access := 'TRUE' }
+VERSION : 0.1
+// Linear analog scaling
+
+VAR_INPUT
+    RawValue : Int;   // Raw analog input (0-27648)
+    ScaleMin : Real := 0.0;   // Engineering unit minimum
+    ScaleMax : Real := 100.0;   // Engineering unit maximum
+END_VAR
+
+VAR_TEMP
+    TempCalc : Real;
+END_VAR
+
+BEGIN
+    #TempCalc := INT_TO_REAL(#RawValue);
+    #FC_Scale := #ScaleMin + (#TempCalc * (#ScaleMax - #ScaleMin) / 27648.0);
+END_FUNCTION
+
+ORGANIZATION_BLOCK "Main [OB1]"
+{ S7_Optimized_Access := 'TRUE' }
+VERSION : 0.1
+// Main scan cycle
+
+BEGIN
+    // Call motor control
+    "DB_Motor1"(Enable := "DI_Motor_Enable",
+                Speed_SP := "FC_Scale"(RawValue := "AI_Speed_SP",
+                                       ScaleMin := 0.0,
+                                       ScaleMax := 100.0));
+
+    // Write outputs
+    "DO_Motor_Run" := "DB_Motor1".Running;
+END_ORGANIZATION_BLOCK
+
+DATA_BLOCK "DB_ProcessData"
+{ S7_Optimized_Access := 'TRUE' }
+VERSION : 0.1
+// Process data storage
+
+VAR
+    Motor1_Run : Bool := false;   // Motor 1 run command
+    Motor2_Run : Bool := false;   // Motor 2 run command
+    Valve1_Open : Bool := false;   // Valve 1 open command
+    Speed_Setpoint : Real := 0.0;   // Speed SP in %
+    ProcessTemp : Real := 0.0;   // Process temperature
+    AlarmWord : Word := 16#0000;   // Alarm status word
+END_VAR
+
+BEGIN
+END_DATA_BLOCK
+
+TYPE "UDT_MotorStatus"
+VERSION : 0.1
+// Motor status data type
+
+STRUCT
+    Enable : Bool;   // Enable command
+    Running : Bool;   // Running feedback
+    Error : Bool;   // Error active
+    ErrorCode : Int := 0;   // Error code
+    Speed : Real := 0.0;   // Current speed %
+    RunHours : DInt := 0;   // Operating hours
+END_STRUCT;
+
+END_TYPE
+
+FUNCTION_BLOCK "FB_PlantControl"
+{ S7_Optimized_Access := 'TRUE' }
+VERSION : 0.1
+// Plant control with two motors
+
+VAR_INPUT
+    Start : Bool;   // Plant start
+    Stop : Bool;   // Plant stop
+END_VAR
+
+VAR_OUTPUT
+    PlantRunning : Bool;   // Plant is running
+    ErrorActive : Bool := false;   // Any error active
+END_VAR
+
+VAR
+    Motor1 : "UDT_MotorStatus";   // Motor 1 status
+    Motor2 : "UDT_MotorStatus";   // Motor 2 status
+END_VAR
+
+BEGIN
+    IF #Start AND NOT #Stop THEN
+        #PlantRunning := TRUE;
+        #Motor1.Enable := TRUE;
+        #Motor2.Enable := TRUE;
+    ELSIF #Stop THEN
+        #PlantRunning := FALSE;
+        #Motor1.Enable := FALSE;
+        #Motor2.Enable := FALSE;
+    END_IF;
+
+    #ErrorActive := #Motor1.Error OR #Motor2.Error;
+END_FUNCTION_BLOCK
+
+DATA_BLOCK "DB_PlantControl"
+{ S7_Optimized_Access := 'TRUE' }
+VERSION : 0.1
+"FB_PlantControl"
+
+BEGIN
+END_DATA_BLOCK
