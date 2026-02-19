@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Document>
+  <Engineering version="V14" />
+  <SW.Blocks.FC ID="1">
+    <AttributeList>
+      <Name>FC_DataProcess</Name>
+      <Number>1</Number>
+      <ProgrammingLanguage>SCL</ProgrammingLanguage>
+      <AutoNumber>true</AutoNumber>
+      <Comment>
+        <MultiLanguageText Lang="de-DE">Data processing function</MultiLanguageText>
+      </Comment>
+    </AttributeList>
+    <AttributeList>
+      <Interface>
+        <Sections xmlns="http://www.siemens.com/automation/Openness/SW/Interface/v3">
+          <Section Name="Input">
+            <Member Name="RawValue" Datatype="Int">
+              <Comment>
+                <MultiLanguageText Lang="de-DE">Raw input value</MultiLanguageText>
+              </Comment>
+            </Member>
+          </Section>
+          <Section Name="Output">
+            <Member Name="ScaledValue" Datatype="Real">
+              <Comment>
+                <MultiLanguageText Lang="de-DE">Scaled output</MultiLanguageText>
+              </Comment>
+            </Member>
+          </Section>
+          <Section Name="InOut" />
+          <Section Name="Temp">
+            <Member Name="TempCalc" Datatype="Real" />
+          </Section>
+          <Section Name="Return" />
+        </Sections>
+      </Interface>
+      <ObjectList>
+        <SW.Blocks.CompileUnit ID="1">
+          <AttributeList>
+            <NetworkTitle>
+              <MultiLanguageText Lang="de-DE">Scale Input</MultiLanguageText>
+            </NetworkTitle>
+            <ProgrammingLanguage>SCL</ProgrammingLanguage>
+            <NetworkSource>
+              <StructuredText>
+                #TempCalc := INT_TO_REAL(#RawValue);
+                #ScaledValue := #TempCalc * 100.0 / 27648.0;
+            </StructuredText>
+            </NetworkSource>
+          </AttributeList>
+        </SW.Blocks.CompileUnit>
+      </ObjectList>
+    </AttributeList>
+  </SW.Blocks.FC>
+</Document>

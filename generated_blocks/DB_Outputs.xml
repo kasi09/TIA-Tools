@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Document>
+  <Engineering version="V14" />
+  <SW.Blocks.GlobalDB ID="1">
+    <AttributeList>
+      <Name>DB_Outputs</Name>
+      <Number>1</Number>
+      <AutoNumber>true</AutoNumber>
+      <Comment>
+        <MultiLanguageText Lang="de-DE">Global output data block</MultiLanguageText>
+      </Comment>
+    </AttributeList>
+    <AttributeList>
+      <Interface>
+        <Sections xmlns="http://www.siemens.com/automation/Openness/SW/Interface/v3">
+          <Section Name="Static">
+            <Member Name="Motor1_Run" Datatype="Bool">
+              <StartValue>false</StartValue>
+              <Comment>
+                <MultiLanguageText Lang="de-DE">Motor 1 run command</MultiLanguageText>
+              </Comment>
+            </Member>
+            <Member Name="Motor2_Run" Datatype="Bool">
+              <StartValue>false</StartValue>
+              <Comment>
+                <MultiLanguageText Lang="de-DE">Motor 2 run command</MultiLanguageText>
+              </Comment>
+            </Member>
+            <Member Name="Valve1_Open" Datatype="Bool">
+              <StartValue>false</StartValue>
+              <Comment>
+                <MultiLanguageText Lang="de-DE">Valve 1 open command</MultiLanguageText>
+              </Comment>
+            </Member>
+            <Member Name="Speed_Setpoint" Datatype="Real">
+              <StartValue>0.0</StartValue>
+              <Comment>
+                <MultiLanguageText Lang="de-DE">Speed setpoint %</MultiLanguageText>
+              </Comment>
+            </Member>
+            <Member Name="ProcessTemp" Datatype="Real">
+              <StartValue>0.0</StartValue>
+              <Comment>
+                <MultiLanguageText Lang="de-DE">Process temperature</MultiLanguageText>
+              </Comment>
+            </Member>
+            <Member Name="AlarmWord" Datatype="Word">
+              <StartValue>16#0000</StartValue>
+              <Comment>
+                <MultiLanguageText Lang="de-DE">Alarm status word</MultiLanguageText>
+              </Comment>
+            </Member>
+          </Section>
+        </Sections>
+      </Interface>
+    </AttributeList>
+  </SW.Blocks.GlobalDB>
+</Document>

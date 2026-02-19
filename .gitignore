@@ -1,0 +1,30 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+dist/
+build/
+*.egg
+.venv/
+venv/
+
+# TIA Portal project files (binary, large)
+TIA_PROJ_CLAUDE/
+*.plf
+*.idx
+*.pma14_1
+*.db
+
+# Extracted analysis files
+plf_*.bin
+plf_*.xml
+page_*.bin
+
+# IDE
+.vscode/
+.idea/
+*.swp
+
+# OS
+Thumbs.db
+.DS_Store

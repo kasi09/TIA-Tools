@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Document xmlns="http://www.siemens.com/automation/Openness/SW/Interface/v3">
+  <Engineering version="V14" />
+  <SW.Tags.PlcTagTable ID="0">
+    <AttributeList>
+      <Name>IO_Tags</Name>
+    </AttributeList>
+    <ObjectList>
+      <SW.Tags.PlcTag ID="2130055320">
+        <AttributeList>
+          <Name>DI_Motor1_Feedback</Name>
+          <DataTypeName>Bool</DataTypeName>
+          <LogicalAddress>%I0.0</LogicalAddress>
+          <Comment>
+            <MultiLanguageText Lang="de-DE">Motor 1 running feedback</MultiLanguageText>
+          </Comment>
+        </AttributeList>
+      </SW.Tags.PlcTag>
+      <SW.Tags.PlcTag ID="3916851711">
+        <AttributeList>
+          <Name>DI_Motor2_Feedback</Name>
+          <DataTypeName>Bool</DataTypeName>
+          <LogicalAddress>%I0.1</LogicalAddress>
+          <Comment>
+            <MultiLanguageText Lang="de-DE">Motor 2 running feedback</MultiLanguageText>
+          </Comment>
+        </AttributeList>
+      </SW.Tags.PlcTag>
+      <SW.Tags.PlcTag ID="4111020113">
+        <AttributeList>
+          <Name>DI_Emergency_Stop</Name>
+          <DataTypeName>Bool</DataTypeName>
+          <LogicalAddress>%I0.2</LogicalAddress>
+          <Comment>
+            <MultiLanguageText Lang="de-DE">Emergency stop button</MultiLanguageText>
+          </Comment>
+        </AttributeList>
+      </SW.Tags.PlcTag>
+      <SW.Tags.PlcTag ID="3762334437">
+        <AttributeList>
+          <Name>AI_Temperature</Name>
+          <DataTypeName>Int</DataTypeName>
+          <LogicalAddress>%IW64</LogicalAddress>
+          <Comment>
+            <MultiLanguageText Lang="de-DE">Temperature sensor analog input</MultiLanguageText>
+          </Comment>
+        </AttributeList>
+      </SW.Tags.PlcTag>
+      <SW.Tags.PlcTag ID="1525383879">
+        <AttributeList>
+          <Name>DO_Motor1_Run</Name>
+          <DataTypeName>Bool</DataTypeName>
+          <LogicalAddress>%Q0.0</LogicalAddress>
+          <Comment>
+            <MultiLanguageText Lang="de-DE">Motor 1 run command</MultiLanguageText>
+          </Comment>
+        </AttributeList>
+      </SW.Tags.PlcTag>
+      <SW.Tags.PlcTag ID="3211709520">
+        <AttributeList>
+          <Name>DO_Motor2_Run</Name>
+          <DataTypeName>Bool</DataTypeName>
+          <LogicalAddress>%Q0.1</LogicalAddress>
+          <Comment>
+            <MultiLanguageText Lang="de-DE">Motor 2 run command</MultiLanguageText>
+          </Comment>
+        </AttributeList>
+      </SW.Tags.PlcTag>
+      <SW.Tags.PlcTag ID="3957173222">
+        <AttributeList>
+          <Name>DO_Valve1</Name>
+          <DataTypeName>Bool</DataTypeName>
+          <LogicalAddress>%Q0.2</LogicalAddress>
+          <Comment>
+            <MultiLanguageText Lang="de-DE">Valve 1 control</MultiLanguageText>
+          </Comment>
+        </AttributeList>
+      </SW.Tags.PlcTag>
+      <SW.Tags.PlcTag ID="1392208919">
+        <AttributeList>
+          <Name>AO_Speed_Ref</Name>
+          <DataTypeName>Int</DataTypeName>
+          <LogicalAddress>%QW64</LogicalAddress>
+          <Comment>
+            <MultiLanguageText Lang="de-DE">Speed reference analog output</MultiLanguageText>
+          </Comment>
+        </AttributeList>
+      </SW.Tags.PlcTag>
+    </ObjectList>
+  </SW.Tags.PlcTagTable>
+</Document>

@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Document>
+  <Engineering version="V14" />
+  <SW.Blocks.FB ID="1">
+    <AttributeList>
+      <Name>FB_MotorControl</Name>
+      <Number>1</Number>
+      <ProgrammingLanguage>SCL</ProgrammingLanguage>
+      <AutoNumber>true</AutoNumber>
+      <Comment>
+        <MultiLanguageText Lang="de-DE">Motor control function block</MultiLanguageText>
+      </Comment>
+    </AttributeList>
+    <AttributeList>
+      <Interface>
+        <Sections xmlns="http://www.siemens.com/automation/Openness/SW/Interface/v3">
+          <Section Name="Input">
+            <Member Name="Enable" Datatype="Bool">
+              <Comment>
+                <MultiLanguageText Lang="de-DE">Motor enable signal</MultiLanguageText>
+              </Comment>
+            </Member>
+            <Member Name="Speed_SP" Datatype="Real">
+              <StartValue>0.0</StartValue>
+              <Comment>
+                <MultiLanguageText Lang="de-DE">Speed setpoint 0-100%</MultiLanguageText>
+              </Comment>
+            </Member>
+          </Section>
+          <Section Name="Output">
+            <Member Name="Running" Datatype="Bool">
+              <Comment>
+                <MultiLanguageText Lang="de-DE">Motor running feedback</MultiLanguageText>
+              </Comment>
+            </Member>
+            <Member Name="Speed_PV" Datatype="Real">
+              <StartValue>0.0</StartValue>
+              <Comment>
+                <MultiLanguageText Lang="de-DE">Speed process value</MultiLanguageText>
+              </Comment>
+            </Member>
+            <Member Name="Error" Datatype="Bool">
+              <StartValue>false</StartValue>
+              <Comment>
+                <MultiLanguageText Lang="de-DE">Error flag</MultiLanguageText>
+              </Comment>
+            </Member>
+          </Section>
+          <Section Name="InOut" />
+          <Section Name="Static">
+            <Member Name="RunTimer" Datatype="Time">
+              <StartValue>T#0s</StartValue>
+              <Comment>
+                <MultiLanguageText Lang="de-DE">Internal run timer</MultiLanguageText>
+              </Comment>
+            </Member>
+            <Member Name="StartupDelay" Datatype="Time">
+              <StartValue>T#5s</StartValue>
+              <Comment>
+                <MultiLanguageText Lang="de-DE">Startup delay</MultiLanguageText>
+              </Comment>
+            </Member>
+          </Section>
+          <Section Name="Temp" />
+          <Section Name="Constant" />
+        </Sections>
+      </Interface>
+      <ObjectList>
+        <SW.Blocks.CompileUnit ID="1">
+          <AttributeList>
+            <NetworkTitle>
+              <MultiLanguageText Lang="de-DE">Motor Start/Stop</MultiLanguageText>
+            </NetworkTitle>
+            <ProgrammingLanguage>SCL</ProgrammingLanguage>
+            <NetworkSource>
+              <StructuredText>
+                IF #Enable AND NOT #Error THEN
+                    #Running := TRUE;
+                    #Speed_PV := #Speed_SP;
+                ELSE
+                    #Running := FALSE;
+                    #Speed_PV := 0.0;
+                END_IF;
+            </StructuredText>
+            </NetworkSource>
+          </AttributeList>
+        </SW.Blocks.CompileUnit>
+      </ObjectList>
+    </AttributeList>
+  </SW.Blocks.FB>
+</Document>

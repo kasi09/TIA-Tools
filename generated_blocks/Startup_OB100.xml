@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Document>
+  <Engineering version="V14" />
+  <SW.Blocks.OB ID="100">
+    <AttributeList>
+      <Name>Startup</Name>
+      <Number>100</Number>
+      <ProgrammingLanguage>SCL</ProgrammingLanguage>
+      <AutoNumber>true</AutoNumber>
+      <Comment>
+        <MultiLanguageText Lang="de-DE">Startup Organization Block</MultiLanguageText>
+      </Comment>
+    </AttributeList>
+    <AttributeList>
+      <Interface>
+        <Sections xmlns="http://www.siemens.com/automation/Openness/SW/Interface/v3">
+          <Section Name="Temp">
+            <Member Name="Temp_OB_info" Datatype="Word" />
+          </Section>
+        </Sections>
+      </Interface>
+      <ObjectList>
+        <SW.Blocks.CompileUnit ID="1">
+          <AttributeList>
+            <NetworkTitle>
+              <MultiLanguageText Lang="de-DE">Initialize Outputs</MultiLanguageText>
+            </NetworkTitle>
+            <ProgrammingLanguage>SCL</ProgrammingLanguage>
+            <NetworkSource>
+              <StructuredText>
+            "DB_Outputs".Motor1_Run := FALSE;
+            "DB_Outputs".Motor2_Run := FALSE;
+            "DB_Outputs".Valve1_Open := FALSE;
+        </StructuredText>
+            </NetworkSource>
+          </AttributeList>
+        </SW.Blocks.CompileUnit>
+      </ObjectList>
+    </AttributeList>
+  </SW.Blocks.OB>
+</Document>

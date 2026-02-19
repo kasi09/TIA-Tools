@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Document>
+  <Engineering version="V14" />
+  <SW.Blocks.OB ID="1">
+    <AttributeList>
+      <Name>Main</Name>
+      <Number>1</Number>
+      <ProgrammingLanguage>SCL</ProgrammingLanguage>
+      <AutoNumber>true</AutoNumber>
+      <Comment>
+        <MultiLanguageText Lang="de-DE">Main Program Sweep (Cycle)</MultiLanguageText>
+      </Comment>
+    </AttributeList>
+    <AttributeList>
+      <Interface>
+        <Sections xmlns="http://www.siemens.com/automation/Openness/SW/Interface/v3">
+          <Section Name="Temp">
+            <Member Name="Temp_OB_info" Datatype="Word" />
+          </Section>
+        </Sections>
+      </Interface>
+      <ObjectList>
+        <SW.Blocks.CompileUnit ID="1">
+          <AttributeList>
+            <NetworkTitle>
+              <MultiLanguageText Lang="de-DE">Call Motor Control</MultiLanguageText>
+            </NetworkTitle>
+            <ProgrammingLanguage>SCL</ProgrammingLanguage>
+            <NetworkSource>
+              <StructuredText>"FC_MotorControl"();</StructuredText>
+            </NetworkSource>
+          </AttributeList>
+        </SW.Blocks.CompileUnit>
+        <SW.Blocks.CompileUnit ID="2">
+          <AttributeList>
+            <NetworkTitle>
+              <MultiLanguageText Lang="de-DE">Call Data Processing</MultiLanguageText>
+            </NetworkTitle>
+            <ProgrammingLanguage>SCL</ProgrammingLanguage>
+            <NetworkSource>
+              <StructuredText>"FC_DataProcess"();</StructuredText>
+            </NetworkSource>
+          </AttributeList>
+        </SW.Blocks.CompileUnit>
+      </ObjectList>
+    </AttributeList>
+  </SW.Blocks.OB>
+</Document>
