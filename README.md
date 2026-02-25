@@ -13,6 +13,9 @@ Python toolkit for Siemens TIA Portal projects.
 | `tia_block_generator.py` | Generate TIA Openness XML for OB/FB/FC/DB/Tags | **No** |
 | `tia_tag_export.py` | CSV/Excel tag import/export from PLF projects | **No** |
 | `tia_scl_generator.py` | Generate SCL source files (.scl) for direct TIA import | **No** |
+| `tia_block_library.py` | Standard block templates (Motor, Valve, PID, Alarm, Scale) | **No** |
+| `tia_cross_reference.py` | Cross-reference analysis for SCL source files | **No** |
+| `tia_doc_generator.py` | HTML documentation generator for SCL projects | **No** |
 
 ## Quick Start
 
@@ -145,6 +148,74 @@ scl.save_separate("scl_output/") # Each block as separate .scl file
 
 Import in TIA Portal: *External Sources > Add from file > Generate blocks*
 
+### Standard block library
+
+```python
+from tia_tools import BlockLibrary
+
+lib = BlockLibrary()
+
+# List available templates
+for t in lib.list_templates():
+    print(f"{t['name']:20s} [{t['block_type']}] {t['description']}")
+# FB_Motor, FB_Valve, FB_PID, FB_Alarm, FC_AnalogScale
+
+# Generate SCL from template (with custom parameters)
+scl = lib.generate_scl("FB_Motor", name="FB_Pump1",
+                        startup_time="T#5s", feedback_time="T#10s")
+
+# Generate TIA XML from template
+xml = lib.generate_xml("FB_Motor", name="FB_Pump1", number=10)
+
+# Generate all templates at once
+all_scl = lib.generate_all_scl(prefix="Plant1_")
+```
+
+Available templates:
+
+| Template | Type | Description |
+|---|---|---|
+| `FB_Motor` | FB | Start/Stop/Reset, feedback monitoring, state machine, error codes |
+| `FB_Valve` | FB | Open/Close, feedback, travel time monitoring, timeout error |
+| `FB_PID` | FB | SP/PV/Kp/Ti/Td, Euler discretization, output clamping, manual/auto |
+| `FB_Alarm` | FB | Condition/Acknowledge, auto-reset, active/unacknowledged status |
+| `FC_AnalogScale` | FC | Raw (0-27648) to engineering units, clamping |
+
+### Cross-reference analysis
+
+```python
+from tia_tools import CrossReference
+
+xref = CrossReference()
+xref.scan_directory("./scl_sources")
+
+# Find all usages of a variable or block
+for ref in xref.find_usages("Motor1_Run"):
+    print(f"  {ref.file}:{ref.line} [{ref.kind}] {ref.context}")
+
+# Find unused variables
+unused = xref.find_unused()
+
+# Block dependency analysis
+deps = xref.find_dependencies("Main [OB1]")  # calls, addresses, types
+dependents = xref.find_dependents("FB_MotorControl")  # who calls this block
+
+# Export
+xref.export_csv("cross_reference.csv")
+xref.export_json("cross_reference.json")
+```
+
+### HTML documentation generator
+
+```python
+from tia_tools import DocGenerator
+
+doc = DocGenerator()
+doc.scan_directory("./scl_sources")
+doc.generate("./docs")
+# Creates index.html, {BlockName}.html, dependencies.html
+```
+
 ### Create a TIA project (requires TIA Portal + Openness)
 
 ```python
@@ -180,13 +251,22 @@ python tia_tools/tia_tag_export.py import vars.csv DB_Process.xml db
 # Generate SCL source files
 python -m tia_tools.tia_scl_generator
 
+# Block library - generate all templates
+python -m tia_tools.tia_block_library
+
+# Cross-reference analysis
+python -m tia_tools.tia_cross_reference ./scl_sources
+
+# Generate HTML documentation
+python -m tia_tools.tia_doc_generator ./scl_sources ./docs
+
 # Create a project
 python -m tia_tools.tia_project_creator MyProject D:/Projects --cpu "6ES7 515-2FM01-0AB0"
 ```
 
 ## Requirements
 
-- **Reader + Block Generator + Tag Export (CSV) + SCL Generator:** Python 3.8+ (no external dependencies)
+- **Reader + Block Generator + Tag Export (CSV) + SCL Generator + Block Library + Cross-Reference + Doc Generator:** Python 3.8+ (no external dependencies)
 - **Tag Export (Excel):** Python 3.8+ with `openpyxl`
 - **Project Creator:** Python 3.8+ with `pythonnet`, TIA Portal V14+ Professional with Openness
 
